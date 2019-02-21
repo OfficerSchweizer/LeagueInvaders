@@ -11,21 +11,40 @@ public class Rocketship extends GameObject {
 	}
 
 	void update(String direction) {
-		if (direction.equals("left")) {
+		System.out.println(direction);
+		switch (direction) {
+		
+		case " ":
+			break;
+		case "left":
 			x -= speed;
-		}
+			break;
 
-		if (direction.equals("right")) {
+		case "right":
 			x += speed;
-		}
+			break;
 
-		if (direction.equals("up")) {
+		case "up":
 			y -= speed;
+			break;
+
+		case "down":
+			y += speed;
+			break;
 		}
 
-		if (direction.equals("down")) {
-			y += speed;
-		}
+		// if (direction.equals("left")) {
+		// x -= speed;
+		// }
+		// if (direction.equals("right")) {
+		// x += speed;
+		// }
+		// if (direction.equals("up")) {
+		// y -= speed;
+		// }
+		// if (direction.equals("down")) {
+		// y += speed;
+		// }
 	}
 
 	void draw(Graphics g) {

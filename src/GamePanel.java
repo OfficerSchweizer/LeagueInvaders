@@ -14,8 +14,8 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	Timer timer;
 	Font titleFont;
 	Font subtitleFont;
-	GamePanel gamePanel;
 	Rocketship rocket = new Rocketship(250, 700, 50, 50);
+	ObjectManager objectManager = new ObjectManager(rocket);
 	final int MENU_STATE = 0;
 	final int GAME_STATE = 1;
 	final int END_STATE = 2;
@@ -23,9 +23,8 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 
 	GamePanel() {
 		timer = new Timer((1000 / 60), this);
-		gamePanel = new GamePanel();
-		titleFont = new Font("Arial", Font.PLAIN, 48);
-		subtitleFont = new Font("Arial", Font.PLAIN, 36);
+		titleFont = new Font("Arial", Font.BOLD, 36);
+		subtitleFont = new Font("Arial", Font.PLAIN, 24);
 	}
 
 	void startGame() {
@@ -37,7 +36,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	}
 
 	void updateGameState() {
-		rocket.update();
+		objectManager.update(" ");
 	}
 
 	void updateEndState() {
@@ -45,24 +44,34 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	}
 
 	void drawMenuState(Graphics g) {
+		g.setColor(Color.BLUE);
+		g.fillRect(0, 0, 600, 800);
 		g.setFont(titleFont);
-		g.setColor(Color.white);
-		g.drawString("LEAGUE INVADERS", 400, 100);
+		g.setColor(Color.yellow);
+		g.drawString("LEAGUE INVADERS", 75, 100);
 		g.setFont(subtitleFont);
-		g.drawString("Press ENTER to start", 400, 400);
-		g.drawString("Press SPACE for instructions", 400, 600);
-		g.fillRect(0, 0, WIDTH, HEIGHT);
+		g.setColor(Color.white);
+		g.drawString("Press ENTER to start", 130, 400);
+		g.drawString("Press SPACE for instructions", 90, 600);
+
 	}
 
 	void drawGameState(Graphics g) {
 		g.setColor(Color.BLACK);
-		g.fillRect(0, 0, WIDTH, HEIGHT);
-		rocket.draw(g);
+		g.fillRect(0, 0, 600, 800);
+		objectManager.draw(g);
+
 	}
 
 	void drawEndState(Graphics g) {
 		g.setColor(Color.RED);
-		g.fillRect(0, 0, WIDTH, HEIGHT);
+		g.fillRect(0, 0, 600, 800);
+		g.setFont(titleFont);
+		g.setColor(Color.black);
+		g.drawString("GAME OVER", 130, 200);
+		g.setFont(subtitleFont);
+		g.setColor(Color.white);
+		g.drawString("Press ENTER to restart", 120, 600);
 	}
 
 	@Override
@@ -73,11 +82,11 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		}
 
 		if (currentState == GAME_STATE) {
-			drawMenuState(g);
+			drawGameState(g);
 		}
 
 		if (currentState == END_STATE) {
-			drawMenuState(g);
+			drawEndState(g);
 		}
 	}
 
@@ -114,21 +123,24 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 			}
 		}
 
+		if (e.getKeyCode() == e.VK_SPACE) {	
+			objectManager.addProjectile(new Projectile(rocket.x, rocket.y, 10, 10));
+		}
+
 		if (e.getKeyCode() == e.VK_LEFT) {
-			rocket.update("left");
-			
+			objectManager.update("left");
 		}
-		
+
 		if (e.getKeyCode() == e.VK_RIGHT) {
-			rocket.update("right");
+			objectManager.update("right");
 		}
-		
+
 		if (e.getKeyCode() == e.VK_UP) {
-			rocket.update("up");
+			objectManager.update("up");
 		}
-		
+
 		if (e.getKeyCode() == e.VK_DOWN) {
-			rocket.update("down");
+			objectManager.update("down");
 		}
 
 	}
