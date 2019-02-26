@@ -11,6 +11,7 @@ public class Rocketship extends GameObject {
 	}
 
 	void update(String direction) {
+		super.update();
 		System.out.println(direction);
 		switch (direction) {
 		

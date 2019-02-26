@@ -5,7 +5,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.ArrayList;
+import java.util.Random;
+
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -25,6 +26,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		timer = new Timer((1000 / 60), this);
 		titleFont = new Font("Arial", Font.BOLD, 36);
 		subtitleFont = new Font("Arial", Font.PLAIN, 24);
+
 	}
 
 	void startGame() {
@@ -36,7 +38,9 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	}
 
 	void updateGameState() {
-		objectManager.update(" ");
+		objectManager.update();
+		objectManager.purgeObjects();
+
 	}
 
 	void updateEndState() {
@@ -59,7 +63,14 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	void drawGameState(Graphics g) {
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, 600, 800);
-		objectManager.draw(g);
+		rocket.draw(g);
+		for (int i = 0; i < objectManager.projectiles.size(); i++) {
+			objectManager.projectiles.get(i).draw(g);
+		}
+		for (int i = 0; i < objectManager.aliens.size(); i++) {
+			objectManager.aliens.get(i).draw(g);
+			System.out.println("drew alien");
+		}
 
 	}
 
@@ -116,33 +127,36 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 
-		if (e.getKeyCode() == e.VK_ENTER) {
+		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 			currentState++;
 			if (currentState > END_STATE) {
 				currentState = MENU_STATE;
 			}
 		}
 
-		if (e.getKeyCode() == e.VK_SPACE) {	
+		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+			rocket.update("left");
+		}
+
+		if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+			rocket.update("right");
+		}
+
+		if (e.getKeyCode() == KeyEvent.VK_UP) {
+			rocket.update("up");
+		}
+
+		if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+			rocket.update("down");
+		}
+
+		if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 			objectManager.addProjectile(new Projectile(rocket.x, rocket.y, 10, 10));
 		}
-
-		if (e.getKeyCode() == e.VK_LEFT) {
-			objectManager.update("left");
+		
+		if (e.getKeyCode() == KeyEvent.VK_A) {
+			objectManager.addAlien(new Alien(new Random().nextInt(550), 0, 50, 50));
 		}
-
-		if (e.getKeyCode() == e.VK_RIGHT) {
-			objectManager.update("right");
-		}
-
-		if (e.getKeyCode() == e.VK_UP) {
-			objectManager.update("up");
-		}
-
-		if (e.getKeyCode() == e.VK_DOWN) {
-			objectManager.update("down");
-		}
-
 	}
 
 	@Override

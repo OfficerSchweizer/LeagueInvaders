@@ -6,13 +6,14 @@ public class Projectile extends GameObject {
 	int speed = 10;
 
 	Projectile(int x, int y, int width, int height) {
-		super(x, y, width, height);
+		super(x+20, y, width, height);
 
 	}
 
 	void update() {
+		super.update();
 		y -= speed;
-		if (y < 0) {
+		if (y <= 0) {
 			isAlive = false;
 		}
 	}
