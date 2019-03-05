@@ -4,6 +4,10 @@ import java.awt.Graphics;
 public class Rocketship extends GameObject {
 
 	int speed;
+	boolean movingRight;
+	boolean movingLeft;
+	boolean movingUp;
+	boolean movingDown;
 
 	Rocketship(int x, int y, int width, int height) {
 		super(x, y, width, height);
@@ -11,41 +15,55 @@ public class Rocketship extends GameObject {
 	}
 
 	void update(String direction) {
-		super.update();
-		System.out.println(direction);
-		switch (direction) {
 		
-		case " ":
-			break;
-		case "left":
-			x -= speed;
-			break;
+		super.update();
 
-		case "right":
-			x += speed;
-			break;
-
-		case "up":
-			y -= speed;
-			break;
-
-		case "down":
-			y += speed;
-			break;
+		if (direction.equals("left")) {
+			movingLeft = true;
 		}
 
-		// if (direction.equals("left")) {
-		// x -= speed;
-		// }
-		// if (direction.equals("right")) {
-		// x += speed;
-		// }
-		// if (direction.equals("up")) {
-		// y -= speed;
-		// }
-		// if (direction.equals("down")) {
-		// y += speed;
-		// }
+		if (direction.equals("right")) {
+			movingRight = true;
+		}
+
+		if (direction.equals("up")) {
+			movingUp = true;
+		}
+
+		if (direction.equals("down")) {
+			movingDown = true;
+		}
+
+		if (direction.equals("stopLeft")) {
+			movingLeft = false;
+		}
+
+		if (direction.equals("stopRight")) {
+			movingRight = false;
+		}
+
+		if (direction.equals("stopUp")) {
+			movingUp = false;
+		}
+
+		if (direction.equals("stopDown")) {
+			movingDown = false;
+		}
+	}
+
+	void update() {
+		if (movingLeft) {
+			x -= speed;
+		}
+		if (movingRight) {
+			x += speed;
+		}
+		if (movingUp) {
+			y -= speed;
+		}
+		if (movingDown) {
+			y += speed;
+		}
 	}
 
 	void draw(Graphics g) {

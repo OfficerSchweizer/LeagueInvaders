@@ -6,7 +6,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Random;
-
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -15,6 +14,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	Timer timer;
 	Font titleFont;
 	Font subtitleFont;
+	Font scoreFont;
 	Rocketship rocket = new Rocketship(250, 700, 50, 50);
 	ObjectManager objectManager = new ObjectManager(rocket);
 	final int MENU_STATE = 0;
@@ -38,8 +38,14 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	}
 
 	void updateGameState() {
+		rocket.update();
 		objectManager.update();
 		objectManager.purgeObjects();
+		objectManager.manageEnemies();
+		objectManager.checkCollision();
+		if (!rocket.isAlive) {
+			updateEndState();
+		}
 
 	}
 
@@ -64,12 +70,18 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, 600, 800);
 		rocket.draw(g);
+		g.setFont(subtitleFont);
+		g.setColor(Color.white);
+		g.drawString("Score: " + objectManager.score, 0, 24);
+
+		// fix this
+
 		for (int i = 0; i < objectManager.projectiles.size(); i++) {
 			objectManager.projectiles.get(i).draw(g);
 		}
+
 		for (int i = 0; i < objectManager.aliens.size(); i++) {
 			objectManager.aliens.get(i).draw(g);
-			System.out.println("drew alien");
 		}
 
 	}
@@ -153,7 +165,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 			objectManager.addProjectile(new Projectile(rocket.x, rocket.y, 10, 10));
 		}
-		
+
 		if (e.getKeyCode() == KeyEvent.VK_A) {
 			objectManager.addAlien(new Alien(new Random().nextInt(550), 0, 50, 50));
 		}
@@ -161,7 +173,21 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 
 	@Override
 	public void keyReleased(KeyEvent e) {
+		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+			rocket.update("stopLeft");
+		}
 
+		if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+			rocket.update("stopRight");
+		}
+
+		if (e.getKeyCode() == KeyEvent.VK_UP) {
+			rocket.update("stopUp");
+		}
+
+		if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+			rocket.update("stopDown");
+		}
 	}
 
 }
