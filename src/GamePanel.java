@@ -15,7 +15,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	Font titleFont;
 	Font subtitleFont;
 	Font scoreFont;
-	Rocketship rocket = new Rocketship(250, 700, 50, 50);
+	Rocketship rocket = new Rocketship(225, 700, 50, 50);
 	ObjectManager objectManager = new ObjectManager(rocket);
 	final int MENU_STATE = 0;
 	final int GAME_STATE = 1;
@@ -43,10 +43,16 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		objectManager.purgeObjects();
 		objectManager.manageEnemies();
 		objectManager.checkCollision();
-		if (!rocket.isAlive) {
-			updateEndState();
+		for (Alien alien : objectManager.aliens) {
+			if (alien.collisionBox.intersects(rocket.collisionBox)) {
+				rocket.isAlive = false;
+			}
 		}
 
+		if (!rocket.isAlive) {
+			currentState = END_STATE;
+
+		}
 	}
 
 	void updateEndState() {
@@ -73,8 +79,6 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		g.setFont(subtitleFont);
 		g.setColor(Color.white);
 		g.drawString("Score: " + objectManager.score, 0, 24);
-
-		// fix this
 
 		for (int i = 0; i < objectManager.projectiles.size(); i++) {
 			objectManager.projectiles.get(i).draw(g);
@@ -140,10 +144,16 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	public void keyPressed(KeyEvent e) {
 
 		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+			if (currentState == END_STATE) {
+				rocket = new Rocketship(225, 700, 50, 50);
+				objectManager = new ObjectManager(rocket);
+				System.out.println("asdf");
+			}
 			currentState++;
 			if (currentState > END_STATE) {
 				currentState = MENU_STATE;
 			}
+
 		}
 
 		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
@@ -166,9 +176,6 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 			objectManager.addProjectile(new Projectile(rocket.x, rocket.y, 10, 10));
 		}
 
-		if (e.getKeyCode() == KeyEvent.VK_A) {
-			objectManager.addAlien(new Alien(new Random().nextInt(550), 0, 50, 50));
-		}
 	}
 
 	@Override

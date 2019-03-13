@@ -8,10 +8,10 @@ public class ObjectManager {
 
 	int score = 0;
 	long enemyTimer = System.currentTimeMillis();
-	int enemySpawnTime = 2000;
+	int enemySpawnTime = 1500;
 	Rocketship rocket;
 	ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
-	ArrayList<Alien> aliens = new ArrayList<Alien>();
+	public ArrayList<Alien> aliens = new ArrayList<Alien>();
 
 	ObjectManager(Rocketship rocket) {
 		rocket = new Rocketship(250, 700, 50, 50);
@@ -22,11 +22,6 @@ public class ObjectManager {
 	}
 
 	void checkCollision() {
-//		for (Alien alien : aliens) {
-//			if (alien.collisionBox.intersects(rocket.collisionBox)) {
-//				rocket.isAlive = false;
-//			}
-//		}
 
 		for (Projectile projectile : projectiles) {
 			for (Alien alien : aliens) {
@@ -41,7 +36,6 @@ public class ObjectManager {
 
 	void addProjectile(Projectile projectile) {
 		projectiles.add(projectile);
-		System.out.println("shoot");
 
 	}
 
@@ -66,7 +60,7 @@ public class ObjectManager {
 	public void manageEnemies() {
 
 		if (System.currentTimeMillis() - enemyTimer >= enemySpawnTime) {
-			addAlien(new Alien(new Random().nextInt(600), 0, 50, 50));
+			addAlien(new Alien((new Random().nextInt(350) + 50), 0, 50, 50));
 			enemyTimer = System.currentTimeMillis();
 		}
 

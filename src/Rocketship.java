@@ -52,6 +52,7 @@ public class Rocketship extends GameObject {
 	}
 
 	void update() {
+		
 		if (movingLeft) {
 			x -= speed;
 		}
@@ -63,6 +64,20 @@ public class Rocketship extends GameObject {
 		}
 		if (movingDown) {
 			y += speed;
+		}
+		
+		
+		if (x < 0) {
+			x = 0;
+		}
+		if (x > 450) {
+			x = 450;
+		}
+		if (y > 750) {
+			y = 750;
+		}
+		if (y > 450) {
+			x = 450;
 		}
 	}
 
