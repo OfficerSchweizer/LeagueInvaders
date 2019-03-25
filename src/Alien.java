@@ -31,8 +31,6 @@ public class Alien extends GameObject {
 
 			x += xSpeed;
 
-//			if (direction == 1) {
-//				xSpeed = -xSpeed;
 			
 			if (x > 450 || x < 0) {
 				xSpeed = -xSpeed;
@@ -53,7 +51,6 @@ public class Alien extends GameObject {
 	}
 
 	void draw(Graphics g) {
-		g.setColor(Color.YELLOW);
-		g.fillRect(x, y, 50, 50);
+		g.drawImage(GamePanel.alienImg, x, y, width, height, null);
 	}
 }
